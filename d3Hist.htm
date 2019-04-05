@@ -1,0 +1,62 @@
+<html>
+
+<head>
+    <!-- 修改网页编码 -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>D3直方图
+    </title>
+</head>
+
+<body>
+    <script src="d3.min.js"></script>
+    <script>
+        //获得用户屏幕分辨率，实际用户可视更小
+        var w = window.innerWidth
+            || document.documentElement.clientWidth
+            || document.body.clientWidth;
+
+        var h = window.innerHeight
+            || document.documentElement.clientHeight
+            || document.body.clientHeight;
+        w = w * 0.98;
+        h = h * 0.9;
+
+        var dataset = new Array(10);
+        for (var i = 0; i < 10; i++) {
+            dataset[i] = 500 * Math.random();
+        }
+        var svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+
+        //一个矩形
+        // svg.append("rect")
+        //     .attr("x", 0)
+        //     .attr("y", 0)
+        //     .attr("width", 100)
+        //     .attr("height", 400)
+        //     .attr("fill", "blue");
+
+        //一组矩形,批量添加;
+        svg.selectAll("rect")
+            .data(dataset)
+            .enter()
+            .append("rect")
+            .attr("x", function (d, i) {       //*d-绑定的数据 i-数据的下标
+                return i * (w / dataset.length);
+            })
+            .attr("y", function (d) {
+                return h - d;                 //改为向上生长
+            })
+            .attr("width", function (d) {
+                return w / dataset.length - 10;
+            })
+            .attr("height", function (d) {
+                return d;                   //d-返回每个数据
+            })
+            .attr("fill", "blue");
+    </script>
+</body>
+
+</html>
