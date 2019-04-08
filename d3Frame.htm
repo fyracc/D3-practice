@@ -1,0 +1,30 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>D3框架
+    </title>
+</head>
+
+<body>
+    <script src="d3.min.js"></script>
+    <script>
+        //获得用户屏幕分辨率，实际用户可视更小
+        var w = window.innerWidth
+            || document.documentElement.clientWidth
+            || document.body.clientWidth;
+
+        var h = window.innerHeight
+            || document.documentElement.clientHeight
+            || document.body.clientHeight;
+        w = w * 0.98;
+        h = h * 0.9;
+
+        var svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+    </script>
+</body>
+
+</html>
