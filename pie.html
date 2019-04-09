@@ -46,16 +46,16 @@
                 console.log(arc(d));
                 return arc(d);
             })
-            .attr("fill", "yellow")
+            .attr("fill", "LightCyan")
             .attr("stroke", "blue")
             .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")")
             .on("mouseover", function (d) {
                 d3.select(this)
-                    .attr("fill", "green");
+                    .attr("fill", "SkyBlue");
             })
             .on("mouseout", function (d) {
                 d3.select(this)
-                    .attr("fill", "yellow");
+                    .attr("fill", "LightCyan");
             });
 
         svg.selectAll("text")
