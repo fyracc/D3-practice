@@ -2,7 +2,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>D3绘制弧
+    <title>D3 基于arc的饼图
     </title>
 </head>
 
@@ -20,27 +20,28 @@
         w = w * 0.98;
         h = h * 0.9;
 
-        var dataset = [{ startAngle: 0, endAngle: 1 },
-        { startAngle: 1, endAngle: 2 },
-        { startAngle: 2, endAngle: 3 },
-        { startAngle: 3, endAngle: 4 },
-        { startAngle: 4, endAngle: Math.PI * 2 }]
-
-        var arcPath = d3.svg.arc()
-            .innerRadius(100)
-            .outerRadius(300);
-        
         var svg = d3.select("body")
             .append("svg")
             .attr("width", w)
             .attr("height", h);
 
+        var dataset = [{ startAngle: 0, endAngle: 1 },
+        { startAngle: 1, endAngle: 2 },
+        { startAngle: 2, endAngle: 3 },
+        { startAngle: 3, endAngle: 4 },
+        { startAngle: 4, endAngle: Math.PI * 2 }];
+
+        var arcPath = d3.svg.arc()
+            .innerRadius(0)
+            .outerRadius(300);
+
         svg.selectAll("path")
             .data(dataset)
             .enter()
             .append("path")
-            .attr("d",function(d,i){
-                return arcPath(d)
+            .attr("d", function (d, i) {            //用arc计算出每个pie的参数,作为path的d参数
+                console.log(arcPath(d));
+                return arcPath(d);
             })
             .attr("fill", "yellow")
             .attr("stroke", "blue")

@@ -1,0 +1,78 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>D3 原生数据饼图
+    </title>
+</head>
+
+<body>
+    <script src="d3.v3.min.js"></script>
+    <script>
+        var w = window.innerWidth
+            || document.documentElement.clientWidth
+            || document.body.clientWidth;
+
+        var h = window.innerHeight
+            || document.documentElement.clientHeight
+            || document.body.clientHeight;
+        w = w * 0.98;
+        h = h * 0.9;
+
+        var svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+
+        var dataset = [["农业", 90], ["工业", 200], ["第三产业", 400]];
+        //pie绑定dataset
+        var pie = d3.layout.pie()
+            .value(function (d) {
+                return d[1];
+            })
+        var piedata = pie(dataset);
+        console.log(dataset);
+        console.log(piedata);
+
+        var arc = d3.svg.arc()
+            .innerRadius(200)
+            .outerRadius(300);
+
+        svg.selectAll("path")
+            .data(piedata)      //绑定弧度数
+            .enter()
+            .append("path")
+            .attr("d", function (d, i) {        //用arc计算出每个pie的参数,作为path的d参数
+                console.log(arc(d));
+                return arc(d);
+            })
+            .attr("fill", "yellow")
+            .attr("stroke", "blue")
+            .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")")
+            .on("mouseover", function (d) {
+                d3.select(this)
+                    .attr("fill", "green");
+            })
+            .on("mouseout", function (d) {
+                d3.select(this)
+                    .attr("fill", "yellow");
+            });
+
+        svg.selectAll("text")
+            .data(piedata)
+            .enter()
+            .append("text")
+            .attr("fill", "blue")
+            .attr("text-anchor", "middle")   //添加锚点，更居中
+            .attr("transform", function (d) {
+                var x = arc.centroid(d)[0];
+                var y = arc.centroid(d)[1];                                         //传进d，才能取得xy坐标
+                return "translate(" + (w / 2 + x) + "," + (h / 2 + y) + ")";        //标签也需要平移
+            })
+            .text(function (d) {
+                return d.value;
+            });
+    </script>
+</body>
+
+</html>
