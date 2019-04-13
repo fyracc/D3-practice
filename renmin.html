@@ -1,0 +1,101 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>D3 人民的名义力导向图
+    </title>
+</head>
+
+<body>
+    <script src="d3.v3.min.js"></script>
+    <script>
+        //获得用户屏幕分辨率，实际用户可视更小
+        var w = window.innerWidth
+            || document.documentElement.clientWidth
+            || document.body.clientWidth;
+
+        var h = window.innerHeight
+            || document.documentElement.clientHeight
+            || document.body.clientHeight;
+        w = w * 0.98;
+        h = h * 0.9;
+
+        var color = d3.scale.category20();
+        var force = d3.layout.force()
+            .charge(-120)               //力导向电荷
+            .linkDistance(100)          //链接距离
+            .size([w, h]);              //大小
+
+        var svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+
+        d3.json("renmin.json", function (error, graph) { //读入json文件
+            console.log(graph);
+
+            //绑定信息到力导向中
+            force.nodes(graph.nodes)
+                .links(graph.links)
+                .start();
+
+            var link = svg.selectAll(".link")
+                .data(graph.links)
+                .enter()
+                .append("line")
+                .attr("class", "link")
+                .style("stroke-width", function (d) { return Math.sqrt(d.value); })
+                .style("stroke", "#999");
+
+            var node = svg.selectAll(".node")
+                .data(graph.nodes)
+                .enter()
+                .append("circle")
+                .attr("class", "node")
+                .attr("r", function (d) { return d.weight * 2; })     //weight表示节点的边数
+                .attr("cx", 100)
+                .attr("cy", 100)
+                .style("fill", function (d, i) {
+                    return color(i);
+                })
+                .call(force.drag);      //可拖拽
+
+            //姓名
+            var text = svg.selectAll(".forcetxt")
+                .data(graph.nodes)
+                .enter()
+                .append("text")
+                .attr("class", "forcetxt")
+                .attr("x", 100)
+                .attr("y", 200)
+                .text(function (d) { return d.name });
+
+            //关系
+            var edges_text = svg.selectAll(".linetext")
+                .data(graph.links)
+                .enter()
+                .append("text")
+                .attr("class", "linetext")
+                .text(function (d) { return d.relation })
+                .style("font-size", "8px");
+
+            force.on("tick", function () {     //每时每刻刷新
+                node.attr("cx", function (d) { return d.x; })
+                    .attr("cy", function (d) { return d.y; });
+
+                link.attr("x1", function (d) { return d.source.x; })
+                    .attr("y1", function (d) { return d.source.y; })
+                    .attr("x2", function (d) { return d.target.x; })
+                    .attr("y2", function (d) { return d.target.y; });
+                text.attr("x", function (d) { return d.x })
+                    .attr("y", function (d) { return d.y })
+                    .style("font-size", "10px");
+                edges_text.attr("x", function (d) { return (d.source.x + d.target.x) / 2 })
+                    .attr("y", function (d) { return (d.source.y + d.target.y) / 2 })
+            });
+
+        })      
+    </script>
+</body>
+
+</html>
