@@ -1,0 +1,26 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>基于路径上的文字
+    </title>
+</head>
+
+<body>
+    <svg width="100%" height="100%">
+        <defs>
+            <path id="mypath" stroke="blue" d="M 10 200 
+                   C 200 100 300   0 400 100
+                   C 500 200 600 300 700 200
+                   C 800 100 900 100 900 100" />
+        </defs>
+        <use xlink:href="#mypath" fill="none" stroke="blue" />
+        <text font-size=40 fill="green">
+            <textPath xlink:href="#mypath">
+                后海有树的院子，夏代有工的玉，此时此刻的云，二十来岁的你……
+            </textPath>
+        </text>
+    </svg>
+</body>
+
+</html>
